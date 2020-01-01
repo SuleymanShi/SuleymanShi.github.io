@@ -168,6 +168,71 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/01/2-way%20Insertion%20Sort/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://pic1.zhimg.com/v2-4c75f5990c039654172d9e40bac77b36_r.jpg">
+      <meta itemprop="name" content="Ruoyu">
+      <meta itemprop="description" content="C/C++">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Roy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/01/2-way%20Insertion%20Sort/" class="post-title-link" itemprop="url">2-way Insertion Sort</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-01-01 23:47:47 / Modified: 23:47:37" itemprop="dateCreated datePublished" datetime="2020-01-01T23:47:47+08:00">2020-01-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h1><h2 id="二路插入排序（C语言版）"><a href="#二路插入排序（C语言版）" class="headerlink" title="二路插入排序（C语言版）"></a>二路插入排序（C语言版）</h2><h4 id="1-代码"><a href="#1-代码" class="headerlink" title="1. 代码"></a>1. 代码</h4><p>&emsp;&emsp;折半插入排序仅仅优化了插入排序的查找过程，减少了比较次数，而二路插入排序（2-way Insertion Sort）在折半插入排序的基础上，优化了插入过程，减少了移动次数。<br>&emsp;&emsp;先约定一下记号，$A$为待排序数组，$B$为新开辟数组，$C$为排序完成的数组，$a$为$A$的第一个元素。<br>&emsp;&emsp;基本想法是这样的：<br>&emsp;&emsp;首先，在最终排序完成的数组$C$中，元素$a$将数组$C$分成两部分，$C = [C_1, a, C_2]$，其中$C_1$、$C_2$为有序数组，且$C_1$中元素小于$a$，$C_2$中元素大于等于$a$。（由于$a$是$A$的第一个元素，所以为了保持排序的稳定性，与$a$相等的元素会放到$C_2$中）<br>&emsp;&emsp;因此，我们可以开辟$C_1$，$C_2$两个新数组，将小于$a$的元素放入$C_1$进行折半插入排序，将大于等于$a$的元素放入$C_2$进行折半插入排序。当元素插入$C_1$时，就不必移动$C_2$中的元素。这样，就减少了移动次数。<br>&emsp;&emsp;在实际实现中，不必开辟两个数组来实现。我们可以用一个循环数组$B$来代替$C_1$,$C_2$。具体做法为：将$a$放到$B$的第一个位置，$a$之前的空间为$C_1$，之后为$C_2$。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAXSIZE 20          <span class="comment">//一个用作示例的小顺序表的最大长度</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> KeyType;        <span class="comment">//定义关键字类型为整数类型</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span>            </span><br><span class="line">  KeyType key;              <span class="comment">//关键字项</span></span><br><span class="line">  InfoType otherinfo;       <span class="comment">//其他数据项</span></span><br><span class="line">&#125;RedType;                   <span class="comment">//记录类型（RecordType缩写）</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">  RedType r[MAXSIZE + <span class="number">1</span>];   <span class="comment">//r[0]闲置或用作哨兵单元</span></span><br><span class="line">  <span class="keyword">int</span> length;               <span class="comment">//顺序表长度</span></span><br><span class="line">&#125;SqList;                    <span class="comment">//顺序表类型</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BiSearch</span><span class="params">(SqList L, <span class="keyword">int</span> low, <span class="keyword">int</span> high, RedType r)</span></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> m;</span><br><span class="line">  <span class="keyword">while</span>(low &lt;= high)&#123;</span><br><span class="line">    m = (low + high) / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">if</span>(r.key &lt; L.r[m].key) high = m - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span> low = m + <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> low;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//将顺序表L中元素按递增排序：</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">twoWayInsertSort</span><span class="params">(SqList &amp;L)</span></span>&#123;</span><br><span class="line">  SqList B;</span><br><span class="line">  <span class="keyword">int</span> first = <span class="number">0</span>, <span class="keyword">final</span> = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">int</span> location;</span><br><span class="line">  B.length = L.length;</span><br><span class="line">  B.r[<span class="number">0</span>] = L.r[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span>(i &lt; L.length)&#123;                 <span class="comment">//元素是否全部排列完毕</span></span><br><span class="line">    <span class="keyword">if</span>(L.r[i].key &lt; B.r[<span class="number">0</span>].key)&#123;      <span class="comment">//该元素属于C1</span></span><br><span class="line">      <span class="keyword">if</span>(first == <span class="number">0</span>)&#123;                 <span class="comment">//C1的第一个元素单独操作</span></span><br><span class="line">        B.r[B.length - <span class="number">1</span>].key = L.r[i].key;</span><br><span class="line">        first = B.length - <span class="number">1</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">//BiSearch给出的是向右移动的location，向左移动需要减一</span></span><br><span class="line">        location = BiSearch(B, first, L.length - <span class="number">1</span>, L.r[i]) - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = first; j &lt;= location; j = (j + <span class="number">1</span>) % L.length)  <span class="comment">//向左移动</span></span><br><span class="line">          B.r[j - <span class="number">1</span>] = B.r[j];</span><br><span class="line"></span><br><span class="line">        B.r[location] = L.r[i];                                   <span class="comment">//填充元素</span></span><br><span class="line">        --first;                                                  <span class="comment">//更新first</span></span><br><span class="line">        ++i;                                                      <span class="comment">//完成数+1</span></span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;                            <span class="comment">//该元素属于C2</span></span><br><span class="line">      location = BiSearch(B, <span class="number">0</span>, <span class="keyword">final</span>, L.r[i]);</span><br><span class="line">      <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="keyword">final</span>; j &gt;= location; j = (j - <span class="number">1</span>) % L.length) <span class="comment">//向右移动</span></span><br><span class="line">        B.r[j + <span class="number">1</span>] = B.r[j];</span><br><span class="line"></span><br><span class="line">      B.r[location] = L.r[i]</span><br><span class="line">      ++<span class="keyword">final</span>;</span><br><span class="line">      ++i;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> j = first, <span class="keyword">int</span> k = <span class="number">0</span>; k &lt; L.length; ++k, j = (j + <span class="number">1</span>) % L.length) <span class="comment">//拷贝</span></span><br><span class="line">  L.r[k] = B.r[j];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-总结"><a href="#2-总结" class="headerlink" title="2.总结"></a>2.总结</h4><ul>
+<li>注意二分查找数组的插入位置时，向右移动和向左移动的位置是不一样的</li>
+<li>插入排序时，第一个元素是给定的，所以这里$C_1$的第一个元素我只能单独处理的，不知道有没有更好的办法。</li>
+<li>虽然数组$B$是循环数组，但这里并没有体现出来，因为这里的求余操作$\%$没有什么用，所以仍有改进空间</li>
+<li>没能给出数组$C_1$，$C_2$统一的查找、插入方法，而是分开来做的。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/23/Binary%20Insertion%20Sort/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -550,7 +615,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
