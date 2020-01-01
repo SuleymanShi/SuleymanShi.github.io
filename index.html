@@ -199,7 +199,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-12-24 00:27:39" itemprop="dateModified" datetime="2019-12-24T00:27:39+08:00">2019-12-24</time>
+                <time title="Modified: 2020-01-01 12:36:06" itemprop="dateModified" datetime="2020-01-01T12:36:06+08:00">2020-01-01</time>
               </span>
 
           
@@ -389,7 +389,12 @@
 </tbody>
 </table>
 </div>
-<p>  此时循环结束，插入位置应为<code>high + 1</code>。若<code>r[0] &gt;= r[m]</code>则<code>low = mid + 1</code>，此时变成$L = 1$的情况。<br>  <br><br>  以上就证明了插入位置确实是<code>high + 1</code><br><br></p>
+<p>  此时循环结束，插入位置应为<code>high + 1</code>。若<code>r[0] &gt;= r[m]</code>则<code>low = mid + 1</code>，此时变成$L = 1$的情况。<br>  <br><br>  以上就证明了插入位置确实是<code>high + 1</code></p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><br></h2><p><strong>2020.1.1 补充</strong></p>
+<p>&emsp;&emsp;想到了更简单的理解：代码中可以看出，循环结束时，<code>high</code>指标的右边是所有数据中<strong>大于</strong><code>r[0]</code>的，而<code>low</code>指标左边则是所有数据中<strong>小于等于</strong><code>r[0]</code>的，所以插入位置可以为<code>high + 1</code>，也可以为<code>low</code>。</p>
+<p>&emsp;&emsp;进一步地，这段代码的想法是：将每个数据划到对应的部分（大于<code>r[0]</code>部分或者小于等于<code>r[0]</code>的部分）。因此<code>while</code>循环条件需要判断是否还有剩余的数据没有归类，剩余数据的下标范围是<code>[low, high]</code>。是否有剩余数据，等价于判断这个整数集合是否为空，也就等价于<code>low &lt;= high ?</code>。</p>
+<p>&emsp;&emsp;这样来想，下面两个问题就很容易回答了。</p>
+<hr>
 <ul>
 <li><strong>为什么<code>L.r[0].key &lt; L.r[m].key</code>判断出插入点在高半区而不要加等号?</strong><br>通过对问题一的分析，我们可以看出，这是为了保持插入排序的稳定性<br><br></li>
 <li><strong>为什么查找过程<code>while</code>循环条件是<code>low &lt;= high</code>? 去掉等号会怎么样？</strong><br>若去掉等号，碰到<code>high = low</code>的情况就会导致循环结束，此时没有比较<code>r[0]</code>和<code>r[m]</code>，无法确定插入位置。</li>
@@ -571,7 +576,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
